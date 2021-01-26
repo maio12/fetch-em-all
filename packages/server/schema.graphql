@@ -1,26 +1,50 @@
-type PageInfo {
+type PageInfo { #PageInfo must contain fields hasPreviousPage and hasNextPage, both of which return non‐null booleans. It must also contain fields startCursor and endCursor, both of which return non‐null opaque strings.
   endCursor: ID
-  hasNextPage: Boolean
+  startCursor: ID
+  hasNextPage: Boolean #hasNextPage is used to indicate whether more edges exist following the set defined by the clients arguments
+  hasPreviousPage: Boolean
 }
 
 type Pokemon {
   id: ID!
   name: String
   types: [String]
+  classification: String
 }
 
-type PokemonEdge {
-  cursor: ID!
-  node: Pokemon
+type PokemonEdge { #Edge types must have fields named node and cursor
+  cursor: ID! #This field must return a type that serializes as a String, The result of this field should be considered opaque by the client, but will be passed back to the server as described in the “Arguments”
+  node: Pokemon #this field cannot return a list.
 }
 
 type PokemonsConnection {
-  edges: [PokemonEdge]
+  edges: [PokemonEdge] #A type that is returned in list form by a connection type’s edges field is considered by this spec to be an Edge Type. Edge types must be an “Object”. A field that returns a Connection Type must include forward pagination arguments, backward pagination arguments, or both. These pagination arguments allow the client to slice the set of edges before it is returned.
   pageInfo: PageInfo
 }
 
 type Query {
   pokemons(q: String, after: ID, limit: Int): PokemonsConnection
 
-  pokemonsByType(type: String!): PokemonsConnection
+  pokemonsByType(type: String!, limit: Int, after: ID): PokemonsConnection
 }
+
+##{
+#  user {
+#    id
+#    name
+#    friends(first: 10, after: "opaqueCursor") { #To enable forward pagination, two arguments are required. first takes a non‐negative integer. after takes the cursor type as described in the cursor field section. You should generally pass the cursor of the last edge in the previous page for after
+#      edges {
+#        cursor
+#        node {
+#          id
+#          name
+#        }
+#      }
+#      pageInfo {
+#        hasNextPage
+#      }
+#    }
+#  }
+#}
+
+#The ordering of edges should be the same when using first/after as when using last/before, all other arguments being equal. It should not be reversed when using last/before.

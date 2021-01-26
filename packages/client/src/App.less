@@ -1,0 +1,33 @@
+@import '~antd/dist/antd.less';
+
+body {
+    background: #eee;
+}
+
+.App {
+    box-sizing: border-box;
+}
+
+.ant-dropdown-menu {
+    height: 300px;
+    overflow: scroll;
+}
+
+.input-group {
+    padding: 2em;
+    background: #eee;
+    position: fixed;
+    z-index: 1;
+    width: 100vw;
+    height: 6em;
+    box-shadow: 0px 2px 4px rgb(0 0 0 / 20%);
+    &__input {
+        max-width: 60%;
+    }
+}
+.ant-table-wrapper.results-table {
+    padding: 1em;
+}
+.ant-spin-nested-loading {
+    margin-top: 6em;
+}

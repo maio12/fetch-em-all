@@ -3,6 +3,7 @@ import * as pokemons from "./models/pokemons";
 
 export const resolvers: IResolvers = {
   Query: {
-    pokemons: (_source, args) => pokemons.query(args)
-  }
+    pokemons: (parent, args) => pokemons.query(args),
+    pokemonsByType: (parent, args) => pokemons.query(args),
+  },
 };
